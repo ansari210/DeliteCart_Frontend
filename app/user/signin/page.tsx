@@ -219,7 +219,9 @@ export default function LoginPage() {
                       type="text"
                       maxLength={1}
                       value={digit}
-                      ref={(el) => (otpRefs.current[i] = el)}
+                      ref={(el) => {
+                        otpRefs.current[i] = el;
+                      }}
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       className="w-12 h-12 text-center border text-[#2e2d2df5]  rounded-lg text-lg   outline-none"
                     />
@@ -272,7 +274,9 @@ export default function LoginPage() {
                       type="text"
                       maxLength={1}
                       value={digit}
-                      ref={(el) => (otpRefs.current[i] = el)}
+                      ref={(el) => {
+                        otpRefs.current[i] = el;
+                      }}
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       className="w-12 h-12 text-center border text-[#2e2d2df5] bg-gray-100 rounded-lg text-lg   outline-none"
                     />
