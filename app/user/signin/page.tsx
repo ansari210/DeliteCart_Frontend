@@ -10,7 +10,7 @@ export default function LoginPage() {
   );
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+ const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
@@ -204,7 +204,8 @@ export default function LoginPage() {
                   Verify Email
                 </h1>
                 <p className="text-gray-500 mb-6">Enter OTP to verify email</p>
-                <p className="text-blue-500">Resend OTP </p><span className="text-gray-500 mb-6">02:00</span>
+                <p className="text-blue-500">Resend OTP </p>
+                <span className="text-gray-500 mb-6">02:00</span>
                 <input
                   type="email"
                   value={email}
@@ -219,7 +220,9 @@ export default function LoginPage() {
                       type="text"
                       maxLength={1}
                       value={digit}
-                      ref={(el) => (otpRefs.current[i] = el)}
+                      ref={(el) => {
+                        otpRefs.current[i] = el;
+                      }}
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       className="w-12 h-12 text-center border text-[#2e2d2df5]  rounded-lg text-lg   outline-none"
                     />
@@ -272,7 +275,9 @@ export default function LoginPage() {
                       type="text"
                       maxLength={1}
                       value={digit}
-                      ref={(el) => (otpRefs.current[i] = el)}
+                      ref={(el) => {
+                        otpRefs.current[i] = el;
+                      }}
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       className="w-12 h-12 text-center border text-[#2e2d2df5] bg-gray-100 rounded-lg text-lg   outline-none"
                     />

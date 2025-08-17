@@ -104,12 +104,11 @@ const discount=60;
         <div className="text-[#565656] flex">
           <span className="flex gap-4">
            <span>Policies:</span> 
-            <Link href={""} target="_blank" rel="noopener noreferrer">Returns Policy |</Link>
-            <Link href={""}>Terms of use </Link>
-            <Link href={""}>Security</Link>
-            <Link href={""}>Privacy</Link>
+            <Link href="/privacy-policy"  className="text-blue-700 hover:underline">Privacy Policy |</Link>
+            <Link href="/term-condition" className="text-blue-700 hover:underline">Terms & Condition </Link>
+            
           </span>
-          <span>© 2025 Delightcart.co.in</span>
+          <span> © 2025 Delightcart.co.in</span>
         </div>
       </div>
     </div>

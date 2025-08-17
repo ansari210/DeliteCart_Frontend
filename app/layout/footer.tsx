@@ -15,8 +15,8 @@ import { FaInstagram, FaFacebook, FaTwitter } from "react-icons/fa";
           <div>
             <h3 className="text-base font-medium mb-4 text-[#f8f8f8]">Useful Links</h3>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link href="#" className="hover:underline">Privacy Policy</Link></li>
-              <li><Link href="#" className="hover:underline">Terms & Conditions</Link></li>
+              <li><Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link></li>
+              <li><Link href="/term-condition" className="hover:underline">Terms & Conditions</Link></li>
                <li><Link href="/contact-us" className="hover:underline">Contact Us</Link></li>
             </ul>
           </div>
