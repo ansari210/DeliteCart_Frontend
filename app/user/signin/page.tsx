@@ -1,9 +1,47 @@
 "use client";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useCreateUser, useDeleteUser, useLogineUser, useUpdateUser, useUsers } from "@/app/api/query/userQuery";
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { cookies } from 'next/headers';
 export default function LoginPage() {
+    const loginUser = useLogineUser();
+    const router=useRouter();
+ const {
+   register,
+   handleSubmit,
+   formState: { errors, isSubmitting },
+   reset,
+ } = useForm<FormValues>({
+   resolver: zodResolver(schema),
+   defaultValues: {
+     email: "",
+     password: "",
+   },
+ });
+const on_login=async (data: FormValues) => {
+   loginUser.mutate(data, {
+      onSuccess: (res) => {
+
+     
+        document.cookie = `access_token=${res?.data}; path=/; max-age=${new Date(Date.now() + 24 * 60 * 60 * 1000)}; SameSite=None; Secure`;
+       
+
+        router.push("/");
+      },
+      onError: (error) => {
+        console.error("❌ Login failed:", error);
+      },
+    });
+  };
+
+
+
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"login" | "forgot" | "otp" | "reset">(
     "login"
@@ -37,7 +75,7 @@ export default function LoginPage() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleS = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password || !agree) {
       alert("Please fill all fields and agree to Terms & Privacy");
@@ -87,21 +125,20 @@ export default function LoginPage() {
                     or
                   </span>
                 </div>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit(on_login)} className="space-y-4">
+                  {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
                   <input
-                    type="email"
                     placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                      {...register('email')}
                     className="w-full border text-[#2e2d2df5]  rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
                   />
-
+                   {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>}
                   <div className="relative">
+                   
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Password (min 8 chars)"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                   {...register('password')}
                       className="w-full text-[#2e2d2df5]  border rounded-lg px-4 py-2 pr-12 focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                     <button
@@ -114,19 +151,7 @@ export default function LoginPage() {
                   </div>
 
                   <div className="flex justify-between text-sm">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={agree}
-                        onChange={(e) => setAgree(e.target.checked)}
-                      />
-                      <span className="text-[#2e2d2df5] ">
-                        I agree to the{" "}
-                        <Link href="#" className="text-blue-600 underline">
-                          Terms & Privacy
-                        </Link>
-                      </span>
-                    </label>
+                    
                     <button
                       onClick={() => setStep("forgot")}
                       className="text-blue-600 cursor-pointer hover:underline"
@@ -137,7 +162,8 @@ export default function LoginPage() {
 
                   <button
                     type="submit"
-                    className="cursor-pointer w-full bg-blue-600 cursor-pointer text-white py-2 rounded-lg font-medium hover:bg-blue-700"
+                      disabled={isSubmitting}
+                    className="cursor-pointer w-full bg-blue-600  text-white py-2 rounded-lg font-medium hover:bg-blue-700"
                   >
                     Login
                   </button>
@@ -371,3 +397,8 @@ export default function LoginPage() {
     </div>
   );
 }
+type FormValues = z.infer<typeof schema>;
+const schema = z.object({
+  email: z.string().email('Enter a valid email'),
+  password: z.string().min(6, 'Message is required'),
+});

@@ -5,6 +5,8 @@ import Header from "./layout/header";
 ;
 import { SessionProvider } from "next-auth/react"
 import FooterWrapper from "./layout/foortwrapper";
+import Providers from "./providers";
+import LoadingProvider from "./components/loader/loader-provider";
 
 // export const metadata: Metadata = {
 //   title: "DelightCart",
@@ -23,11 +25,15 @@ export default function RootLayout({
       <body
        
       > 
+      <Providers>
       <SessionProvider>
+        <LoadingProvider>
         <Header/>
         {children}
       <FooterWrapper/>
+      </LoadingProvider>
       </SessionProvider>
+      </Providers>
       </body>
      
     </html>

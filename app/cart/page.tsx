@@ -2,10 +2,15 @@
 import Image from "next/image";
 import { useCartStore } from "../store/cartStore";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
-export default function CartPage() {
+ const  CartPage=()=> {
   const { items, updateQty, removeItem, total } = useCartStore();
+  const router=useRouter();
+   const handleNavigation = () => {
+    router.push(`/checkout`); 
+  };
 const discount=60;
   return (
     <div>
@@ -94,7 +99,7 @@ const discount=60;
             <p className="text-green-600 text-sm mt-2">
               You will save ₹{discount} on this order
             </p>
-            <button className="bg-[#172337] hover:bg-[#5f4735] cursor-pointer text-white w-full py-2 mt-4 rounded font-semibold">
+            <button onClick={handleNavigation} className="bg-[#172337] hover:bg-[#5f4735] cursor-pointer text-white w-full py-2 mt-4 rounded font-semibold">
               PLACE ORDER
             </button>
           </div>
@@ -114,3 +119,4 @@ const discount=60;
     </div>
   );
 }
+export default CartPage;
