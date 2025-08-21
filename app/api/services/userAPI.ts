@@ -8,7 +8,7 @@ export const loginUser = async (user: { email: string; password: string }) => {
   return data;
 };
 export const getUsers = async () => {
-  const { data } = await Axios.get("/users");
+  const { data } = await Axios.get("/user/get_user_profile");
   return data;
 };
 export const updateUser = async (id: string, user: { name: string; email: string }) => {

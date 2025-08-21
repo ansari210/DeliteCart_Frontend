@@ -7,13 +7,18 @@ import Image from "next/image";
 import { useCartStore } from "../store/cartStore";
 import { useRef, useState } from "react";
 import useClickOutside from "../util/useclickout";
-
+import {
+  useUsers,
+} from "@/app/api/query/userQuery";
+import UserProfile from "./component/profile";
 const Header = () => {
   const { items } = useCartStore();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   useClickOutside(ref, () => setOpen(false));
+  const {data:user}=useUsers();
+   console.log("user data>>>",user);
   return (
     <header className="bg-[#f7f4f4] sticky">
       <div className="container mx-auto flex items-center justify-between py-4 ">
@@ -96,12 +101,16 @@ const Header = () => {
               {items?.length || 0}
             </span>
           </Link>
-          <Link
-            href="/user/signin"
-            className="cursor-pointer relative text-sm text-[#000] font-medium hover:after:w-full after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-orange-500 after:w-0 after:transition-all after:duration-300"
-          >
-            SIGN IN
-          </Link>
+
+          {user&&<UserProfile name={user?.name} imageUrl={user?.image}/>}
+          {!user && (
+            <Link
+              href="/user/signin"
+              className="cursor-pointer relative text-sm text-[#000] font-medium hover:after:w-full after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-orange-500 after:w-0 after:transition-all after:duration-300"
+            >
+              SIGN IN
+            </Link>
+          )}
         </div>
       </div>
     </header>

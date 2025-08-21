@@ -9,41 +9,53 @@ import {
   FiInstagram, FiFacebook, FiTwitter, FiYoutube
 } from 'react-icons/fi';
 import Link from 'next/link';
+;
+import { useCreateQuery } from '../api/query/queryQuery';
 
 const schema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+  first_name: z.string().min(1, 'First name is required'),
+  last_name: z.string().min(1, 'Last name is required'),
   email: z.string().email('Enter a valid email'),
   message: z.string().min(1, 'Message is required'),
-  optInOther: z.boolean().refine(v => v === true, 'Please consent to receive other communication'),
-  optInPrivacy: z.boolean().refine(v => v === true, 'Please consent to store your data'),
+  receiver_comm_message: z.boolean().refine(v => v === true, 'Please consent to receive other communication'),
+  store_data: z.boolean().refine(v => v === true, 'Please consent to store your data'),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export default function ContactPage() {
+  const {mutate}=useCreateQuery()
   const [sent, setSent] = useState<null | 'ok' | 'err'>(null);
   const {
     register, handleSubmit, formState: { errors, isSubmitting }, reset
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       email: '',
       message: '',
-      optInOther: false,
-      optInPrivacy: false,
+      receiver_comm_message: false,
+      store_data: false,
     }
   });
 
   const onSubmit = async (data: FormValues) => {
-  console.log("form data>>>",data);
+    console.log("query data>>>",data)
+    mutate(data, {
+      onSuccess: () => {
+        setSent("ok");
+        reset()
+      },
+      onError: () => {
+        setSent("err");
+      },
+    });
   };
 
   return (
     <main className="min-h-screen ">
-      {/* HERO */}
+    
       <section className="container mx-auto px-4 pt-8">
         <div
           className="
@@ -86,20 +98,20 @@ export default function ContactPage() {
                 <div>
                   <span className="block text-sm font-medium text-gray-700">First Name <span className='text-red-600'>*</span></span>
                   <input
-                    {...register('firstName')}
+                    {...register('first_name')}
                     className="mt-1 w-full text-[#383636e9] rounded-lg border border-gray-300 bg-white px-3 py-2 outline-none focus:border-[#1778e5] focus:ring-4 focus:ring-[#1778e5]/15"
                     placeholder="First name"
                   />
-                  {errors.firstName && <p className="mt-1 text-xs text-red-600">{errors.firstName.message}</p>}
+                  {errors.first_name && <p className="mt-1 text-xs text-red-600">{errors.first_name.message}</p>}
                 </div>
                 <div>
                   <span className="block text-sm font-medium text-gray-700">Last Name <span className='text-red-600'>*</span></span>
                   <input
-                    {...register('lastName')}
+                    {...register('last_name')}
                     className="mt-1 w-full text-[#383636e9] rounded-lg border border-gray-300 bg-white px-3 py-2 outline-none focus:border-[#1778e5] focus:ring-4 focus:ring-[#1778e5]/15"
                     placeholder="Last name"
                   />
-                  {errors.lastName && <p className="mt-1 text-xs text-red-600">{errors.lastName.message}</p>}
+                  {errors.last_name && <p className="mt-1 text-xs text-red-600">{errors.last_name.message}</p>}
                 </div>
               </div>
 
@@ -130,20 +142,20 @@ export default function ContactPage() {
               {/* checkboxes */}
               <div className="space-y-3">
                 <label className="flex items-start gap-3">
-                  <input type="checkbox" {...register('optInOther')} className="mt-1 h-4 w-4 rounded border-gray-300 text-[#1778e5] focus:ring-[#1778e5]" />
+                  <input type="checkbox" {...register('receiver_comm_message')} className="mt-1 h-4 w-4 rounded border-gray-300 text-[#1778e5] focus:ring-[#1778e5]" />
                   <span className="text-sm text-gray-700">
                     I agree to receive other communication messages.<span className="text-red-500">*</span>
                   </span>
                 </label>
-                {errors.optInOther && <p className="text-xs text-red-600">{errors.optInOther.message}</p>}
+                {errors.receiver_comm_message && <p className="text-xs text-red-600">{errors.receiver_comm_message.message}</p>}
 
                 <label className="flex items-start gap-3">
-                  <input type="checkbox" {...register('optInPrivacy')} className="mt-1 h-4 w-4 rounded border-gray-300 text-[#1778e5] focus:ring-[#1778e5]" />
+                  <input type="checkbox" {...register('store_data')} className="mt-1 h-4 w-4 rounded border-gray-300 text-[#1778e5] focus:ring-[#1778e5]" />
                   <span className="text-sm text-gray-700">
                     I give my consent to Delightcart Presenter to store my data.<span className="text-red-500">*</span>
                   </span>
                 </label>
-                {errors.optInPrivacy && <p className="text-xs text-red-600">{errors.optInPrivacy.message}</p>}
+                {errors.store_data && <p className="text-xs text-red-600">{errors.store_data.message}</p>}
               </div>
 
               {/* small paragraph */}

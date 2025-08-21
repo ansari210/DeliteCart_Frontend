@@ -1,38 +1,43 @@
 "use client";
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useCreateUser, useDeleteUser, useLogineUser, useUpdateUser, useUsers } from "@/app/api/query/userQuery";
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { cookies } from 'next/headers';
+import {
+
+  useLogineUser,
+ 
+} from "@/app/api/query/userQuery";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { cookies } from "next/headers";
 export default function LoginPage() {
-    const loginUser = useLogineUser();
-    const router=useRouter();
- const {
-   register,
-   handleSubmit,
-   formState: { errors, isSubmitting },
-   reset,
- } = useForm<FormValues>({
-   resolver: zodResolver(schema),
-   defaultValues: {
-     email: "",
-     password: "",
-   },
- });
-const on_login=async (data: FormValues) => {
-   loginUser.mutate(data, {
+  const loginUser = useLogineUser();
+  const router = useRouter();
+
+ 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+   
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const on_login = async (data: FormValues) => {
+    loginUser.mutate(data, {
       onSuccess: (res) => {
-
-     
-        document.cookie = `access_token=${res?.data}; path=/; max-age=${new Date(Date.now() + 24 * 60 * 60 * 1000)}; SameSite=None; Secure`;
-       
-
-        router.push("/");
+        
+        document.cookie = `access_token=${res?.data}; path=/; max-age=${new Date(
+          Date.now() + 24 * 60 * 60 * 1000
+        )}; SameSite=None; Secure`;
+        window.location.reload();
       },
       onError: (error) => {
         console.error("❌ Login failed:", error);
@@ -40,15 +45,13 @@ const on_login=async (data: FormValues) => {
     });
   };
 
-
-
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"login" | "forgot" | "otp" | "reset">(
     "login"
   );
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [confirmPassword, setConfirmPassword] = useState("");
- const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
@@ -126,19 +129,26 @@ const on_login=async (data: FormValues) => {
                   </span>
                 </div>
                 <form onSubmit={handleSubmit(on_login)} className="space-y-4">
-                  {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
+                  {errors.email && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.email.message}
+                    </p>
+                  )}
                   <input
                     placeholder="Email address"
-                      {...register('email')}
+                    {...register("email")}
                     className="w-full border text-[#2e2d2df5]  rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
                   />
-                   {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>}
+                  {errors.password && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.password.message}
+                    </p>
+                  )}
                   <div className="relative">
-                   
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Password (min 8 chars)"
-                   {...register('password')}
+                      {...register("password")}
                       className="w-full text-[#2e2d2df5]  border rounded-lg px-4 py-2 pr-12 focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                     <button
@@ -151,7 +161,6 @@ const on_login=async (data: FormValues) => {
                   </div>
 
                   <div className="flex justify-between text-sm">
-                    
                     <button
                       onClick={() => setStep("forgot")}
                       className="text-blue-600 cursor-pointer hover:underline"
@@ -162,7 +171,7 @@ const on_login=async (data: FormValues) => {
 
                   <button
                     type="submit"
-                      disabled={isSubmitting}
+                    disabled={isSubmitting}
                     className="cursor-pointer w-full bg-blue-600  text-white py-2 rounded-lg font-medium hover:bg-blue-700"
                   >
                     Login
@@ -399,6 +408,6 @@ const on_login=async (data: FormValues) => {
 }
 type FormValues = z.infer<typeof schema>;
 const schema = z.object({
-  email: z.string().email('Enter a valid email'),
-  password: z.string().min(6, 'Message is required'),
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(6, "Message is required"),
 });

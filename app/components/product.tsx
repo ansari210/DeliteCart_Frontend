@@ -120,15 +120,16 @@ const ProductGrid = () => {
             className="cursor-pointer border  p-3 hover:shadow-lg transition bg-white"
             onClick={handleNavigation}
           >
-            <div className="w-full h-65 relative">
+            <div className="w-full h-65  z-1 ">
               <Image
                 src={product.image}
                 alt={product.name}
-                quality={100}
+                width={900}
+              height={150}
                 priority
-                layout="fill"
+                // layout="fill"
                 // objectFit="contain"
-                className="rounded-md"
+                className="rounded-md z-0 h-65 w-full"
               />
             </div>
 

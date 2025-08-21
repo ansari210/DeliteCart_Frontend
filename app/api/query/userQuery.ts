@@ -2,9 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {getUsers, createUser, updateUser, deleteUser,loginUser } from "../services/userAPI";
 export const useUsers = () => {
   return useQuery({
-    queryKey: ["users"],
+    queryKey: ["user"],
     queryFn: getUsers,
-    staleTime: 1000 * 60, 
   });
 };
 
