@@ -41,7 +41,7 @@ export default function ContactPage() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log("query data>>>",data)
+    
     mutate(data, {
       onSuccess: () => {
         setSent("ok");
@@ -166,13 +166,13 @@ export default function ContactPage() {
 
               {/* actions */}
               <div className="pt-2">
-                <button
+                {sent==="ok"?"":<button
                   type="submit"
                   disabled={isSubmitting}
                   className="inline-flex items-center justify-center rounded-xl bg-[#1778e5] px-5 py-2.5 text-white font-medium shadow-md shadow-[#1778e5]/30 hover:bg-[#156bd0] disabled:opacity-60"
                 >
                   {isSubmitting ? 'Sending…' : 'Send Message'}
-                </button>
+                </button>}
                 {sent === 'ok' && <span className="ml-3 text-sm text-emerald-600">Thanks! We’ll get back to you shortly.</span>}
                 {sent === 'err' && <span className="ml-3 text-sm text-red-600">Something went wrong. Please try again.</span>}
               </div>

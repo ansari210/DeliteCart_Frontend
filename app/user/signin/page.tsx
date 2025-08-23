@@ -5,24 +5,15 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import {
-
-  useLogineUser,
- 
-} from "@/app/api/query/userQuery";
+import { useLogineUser } from "@/app/api/query/userQuery";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { cookies } from "next/headers";
+
 export default function LoginPage() {
   const loginUser = useLogineUser();
-  const router = useRouter();
-
- 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-   
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -33,8 +24,9 @@ export default function LoginPage() {
   const on_login = async (data: FormValues) => {
     loginUser.mutate(data, {
       onSuccess: (res) => {
-        
-        document.cookie = `access_token=${res?.data}; path=/; max-age=${new Date(
+        document.cookie = `access_token=${
+          res?.data
+        }; httpOnly: true;  secure: true;  path=/; max-age=${new Date(
           Date.now() + 24 * 60 * 60 * 1000
         )}; SameSite=None; Secure`;
         window.location.reload();
@@ -52,9 +44,7 @@ export default function LoginPage() {
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [confirmPassword, setConfirmPassword] = useState("");
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
-
   const [password, setPassword] = useState("");
-  const [agree, setAgree] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { data: session } = useSession();
 
@@ -78,24 +68,12 @@ export default function LoginPage() {
     );
   }
 
-  const handleS = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password || !agree) {
-      alert("Please fill all fields and agree to Terms & Privacy");
-      return;
-    }
-    alert("Logged in successfully ✅");
-  };
-
   return (
     <div className="min-h-screen flex">
       {/* Left Form Section */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-10 lg:px-20">
         <div className="max-w-md w-full mx-auto">
-          {/* Form */}
-
           <div className="w-full max-w-md mx-auto mt-10    relative overflow-hidden">
-            {/* ================= Login Step ================66666 */}
             {step === "login" && (
               <>
                 <h1 className="text-2xl font-bold mb-2 text-[#000]">
@@ -105,7 +83,6 @@ export default function LoginPage() {
                   Enter your credentials to access your account
                 </p>
 
-                {/* Social Buttons */}
                 <div className="flex gap-4  mb-6">
                   <button
                     onClick={() => signIn("google")}
@@ -189,7 +166,6 @@ export default function LoginPage() {
               </>
             )}
 
-            {/* ================= Forgot Password Step ================= */}
             {step === "forgot" && (
               <>
                 <h1 className="text-2xl font-bold mb-2 text-[#000]">
@@ -231,8 +207,6 @@ export default function LoginPage() {
                 </div>
               </>
             )}
-
-            {/* ================= OTP Step ================= */}
             {step === "otp" && (
               <div className="animate-slide-in space-y-4">
                 <h1 className="text-2xl font-bold mb-2 text-[#000]">
@@ -286,8 +260,6 @@ export default function LoginPage() {
                 </div>
               </div>
             )}
-
-            {/* ================= Reset Password Step ================= */}
             {step === "reset" && (
               <div className="animate-slide-in space-y-4">
                 <h1 className="text-2xl font-bold mb-2 text-[#000]">
@@ -372,7 +344,6 @@ export default function LoginPage() {
               </div>
             )}
           </div>
-          {/* endform */}
 
           <p className="mt-10 text-xs text-gray-500 text-center">
             2025 Delitecart, All rights reserved
@@ -380,7 +351,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Illustration Section */}
       <div className="hidden lg:flex w-1/2 bg-blue-600 text-white justify-center items-center relative">
         <div className="max-w-md text-center">
           <h2 className="text-3xl font-semibold mb-4">

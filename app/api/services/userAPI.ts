@@ -1,6 +1,6 @@
 import Axios from "../axios";
-export const createUser = async (user: { name: string; email: string }) => {
-  const { data } = await Axios.post("/users", user);
+export const createUser = async (user: { name: string; email: string, password:string,term_privacy:boolean }) => {
+  const { data } = await Axios.post("/user/register", user);
   return data;
 };
 export const loginUser = async (user: { email: string; password: string }) => {

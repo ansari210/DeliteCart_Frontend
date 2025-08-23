@@ -11,7 +11,7 @@ export const useCreateUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (user: { name: string; email: string }) => createUser(user),
+    mutationFn: (user: { name: string; email: string, password:string,term_privacy:boolean }) => createUser(user),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] }); 
     },
