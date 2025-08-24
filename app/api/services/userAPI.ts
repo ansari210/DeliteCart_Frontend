@@ -7,6 +7,13 @@ export const loginUser = async (user: { email: string; password: string }) => {
   const { data } = await Axios.post("/user/login", user);
   return data;
 };
+export const forget_password_otp_genrate=async(email:string)=>{
+  const user={
+    email:email
+  }
+  const {data}=await Axios.post("/user/forget_password/otp",user);
+  return data;
+}
 export const getUsers = async () => {
   const { data } = await Axios.get("/user/get_user_profile");
   return data;
